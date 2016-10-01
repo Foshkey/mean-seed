@@ -3,7 +3,7 @@
   <head>
     <base href="/">
     <meta charset="UTF-8">
-    <title>MEAN App</title>
+    <title>{{title}}</title>
     <link rel="stylesheet" href="/stylesheets/vendor/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/stylesheets/style.css">
 
@@ -18,6 +18,14 @@
     </script>
   </head>
   <body>
-    <app>Loading...</app>
+    <app>
+
+      <!-- Default Loading Screen -->
+      <div class="container">
+        <h1 class="display-4 text-sm-center text-muted">Loading {{title}}</h1>
+        <h1 class="text-sm-center text-muted"><small>Please Wait</small></h1>
+      </div>
+
+    </app>
   </body>
 </html>
