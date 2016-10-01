@@ -1,0 +1,48 @@
+{
+  "name": "mean-seed",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "concurrently \"node ./bin/www\" \"gulp\"",
+    "postinstall": "typings install",
+    "typings": "typings",
+    "vendor": "gulp vendor",
+    "gulp": "gulp clean && gulp",
+    "build:production": "gulp clean && gulp build && node systemjs.builder.js"
+  },
+  "dependencies": {
+    "@angular/common": "2.0.0",
+    "@angular/compiler": "2.0.0",
+    "@angular/core": "2.0.0",
+    "@angular/forms": "2.0.0",
+    "@angular/http": "2.0.0",
+    "@angular/platform-browser": "2.0.0",
+    "@angular/platform-browser-dynamic": "2.0.0",
+    "@angular/router": "3.0.0",
+    "@angular/upgrade": "2.0.0",
+    "body-parser": "~1.15.1",
+    "bootstrap": "^4.0.0-alpha.4",
+    "cookie-parser": "~1.4.3",
+    "core-js": "^2.4.1",
+    "debug": "~2.2.0",
+    "express": "~4.13.4",
+    "hbs": "~4.0.0",
+    "moment": "^2.15.1",
+    "morgan": "~1.7.0",
+    "ng2-bootstrap": "^1.1.5",
+    "reflect-metadata": "^0.1.8",
+    "rxjs": "5.0.0-beta.12",
+    "serve-favicon": "~2.3.0",
+    "systemjs": "0.19.39",
+    "typings": "^1.4.0",
+    "zone.js": "^0.6.25"
+  },
+  "devDependencies": {
+    "concurrently": "^3.0.0",
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-typescript": "^3.0.1",
+    "typescript": "^2.0.3"
+  }
+}
