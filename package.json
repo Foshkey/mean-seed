@@ -1,14 +1,19 @@
 {
   "name": "mean-seed",
   "version": "0.0.0",
+  "description": "Seed project for MEAN Stack",
+  "author": "Foshkey",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/foshkey/mean-stack"
+  },
   "private": true,
   "scripts": {
     "start": "concurrently \"node ./bin/www\" \"gulp\"",
     "postinstall": "typings install",
     "typings": "typings",
     "vendor": "gulp vendor",
-    "gulp": "gulp clean && gulp",
-    "build:production": "gulp clean && gulp build && node systemjs.builder.js"
+    "gulp": "gulp clean && gulp"
   },
   "dependencies": {
     "@angular/common": "2.0.0",
