@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
-var appConfig = require('../auth/app-config');
-var authService = require('../auth/auth-service');
+var appConfig = require('../crest/auth/app-config');
+var authService = require('../crest/auth/auth-service');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {

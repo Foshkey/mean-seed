@@ -8,11 +8,12 @@ var appConfig = require('./app-config');
 // AuthData Constructor Function
 function AuthData() {
   this.authenticated = false;
+  this.authenticatedAt;
   this.state = uuid.v4();
-  this.accessToken = '';
-  this.tokenType = '';
-  this.expiresIn = 0;
-  this.refreshToken = '';
+  this.accessToken;
+  this.tokenType;
+  this.expiresIn;
+  this.refreshToken;
 }
 
 // Authenticate Function
@@ -30,15 +31,51 @@ function authenticate(authData, authorizationCode, state) {
       'code': authorizationCode
     };
 
+    sendRequest(data, authData).then(resolve, reject);
+
+  });
+}
+
+function refresh(authData) {
+  return new promise(function (resolve, reject) {
+
+    // Check refresh token
+    if (!authData.refreshToken) {
+      reject('Refresh token does not exist.');
+    }
+    
+    // Post Data
+    var data = {
+      'grant_type': 'refresh_token',
+      'refresh_token': authData.refreshToken
+    };
+
+    sendRequest(data, authData).then(resolve, reject);
+
+  });
+}
+
+function isExpired(authData) {
+
+  var now = new Date();
+  var nowTime = now.getTime();
+  var expiredTime = authData.authenticatedAt + authData.expiresIn * 1000;
+
+  return nowTime >= expiredTime;
+}
+
+function sendRequest(postData, authData) {
+  return new promise(function (resolve, reject) {
+
     // Options
     var options = {
-      host: 'login.eveonline.com',
-      path: '/oauth/token',
-      method: 'POST',
-      headers: {
-        'Authorization': 'Basic ' + appConfig.authHeader,
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
+        host: 'login.eveonline.com',
+        path: '/oauth/token',
+        method: 'POST',
+        headers: {
+          'Authorization': 'Basic ' + appConfig.authHeader,
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
     };
 
     // Create Request
@@ -56,6 +93,7 @@ function authenticate(authData, authorizationCode, state) {
 
           // Authenticated
           authData.authenticated = true;
+          authData.authenticatedAt = (new Date()).getTime();
           authData.accessToken = data.access_token;
           authData.tokenType = data.token_type;
           authData.expiresIn = data.expires_in;
@@ -81,7 +119,7 @@ function authenticate(authData, authorizationCode, state) {
     })
 
     // Write data
-    req.write(querystring.stringify(data));
+    req.write(querystring.stringify(postData));
 
     // Send
     req.end();
@@ -90,5 +128,7 @@ function authenticate(authData, authorizationCode, state) {
 
 module.exports = {
   AuthData: AuthData,
-  authenticate: authenticate
+  authenticate: authenticate,
+  refresh: refresh,
+  isExpired: isExpired
 }

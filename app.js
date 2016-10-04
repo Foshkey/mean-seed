@@ -8,6 +8,7 @@ var session = require('express-session');
 var uuid = require('uuid');
 
 var routes = require('./routes/index');
+var apiRoutes = require('./routes/api');
 
 var app = express();
 
@@ -40,6 +41,7 @@ if (app.get('env') === 'production') {
 app.use(session(sessionOptions));
 
 app.use('/', routes);
+app.use('/api', apiRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
