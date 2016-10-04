@@ -25,14 +25,14 @@ var getScopeString = function () {
   return scope.join(' ');
 }
 
-var getSsoUrl = function () {
+var genSsoUrl = function (state) {
   var ssoBase = 'https://login.eveonline.com/oauth/authorize';
   var params = {
     response_type: 'code',
     redirect_uri: redirectUrl,
     client_id: clientId,
     scope: getScopeString(),
-    state: 'testing123'
+    state: state
   }
   return ssoBase + '?' + querystring.stringify(params);
 }
@@ -41,5 +41,5 @@ module.exports = {
   clientId: clientId,
   authHeader: getEncodedAuthHeader(),
   scope: getScopeString(),
-  ssoUrl: getSsoUrl()
+  genSsoUrl: genSsoUrl
 }

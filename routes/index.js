@@ -6,19 +6,36 @@ var authService = require('../auth/auth-service');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  if (!req.query.code || !req.query.state) {
-    res.redirect(appConfig.ssoUrl);
+  
+  // Create new auth service in session if it doesn't exist
+  if (!req.session.authData) {
+    req.session.authData = new authService.AuthData();
+    req.session.save();
   }
-  else {
-    authService.authenticate(req.query.code).then(function (data) {
-      console.log(authService);
-      res.json(data);
-    }).catch(function (error) {
-      console.log(error);
-      res.json({});
-    })
+
+  // Check if authenticated
+  if (req.session.authData.authenticated) {
+    // :thumbsup:
+    res.render('index', { title: "Eve App" });
   }
-  //res.render('index', { title: "MEAN App" });
+  else { // Time to authenticate
+
+    // Check if it's a redirect from eve login
+    if (req.query.code && req.query.state) {
+      authService.authenticate(req.session.authData, req.query.code, req.query.state).then(function () {
+        // Should be good to go at this point
+        res.redirect('/');
+      })
+      .catch(function (error) { // Uh Oh
+        console.log(error);
+        res.status(401).send('Unauthorized');
+      });
+    }
+    else { // No code/state? Redirect to Eve SSO to go get it.
+      res.redirect(appConfig.genSsoUrl(req.session.authData.state));
+    }
+
+  }
 });
 
 module.exports = router;
