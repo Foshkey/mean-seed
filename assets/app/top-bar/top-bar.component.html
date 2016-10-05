@@ -4,7 +4,7 @@
     <div class="nav navbar-nav">
       <span class="pull-xs-right nav-item nav-link active" *ngIf="character">
         <span class="profile">
-          <img [src]="portraitUrl" />
+          <img [src]="portraitUrl" class="img-rounded" />
           {{character.CharacterName}}
         </span>
         <a href="{{logoutUrl}}">
