@@ -12,19 +12,25 @@ var CharData = function () {
   this.IntellectualProperty = ''
 }
 
-var getChar = function (accessToken) {
+var getChar = function (req) {
   return new promise(function (resolve, reject) {
-    character(accessToken).then(function (charData) {
-      // Quick check to ensure char id is there.
-      if (charData.CharacterID) {
-        resolve(charData);
-      }
-      else {
-        reject('Could not find Character ID');
-      }
-    }).catch(function (error) {
-      reject(error);
-    })
+    if (req.session.charData) {
+      resolve(req.session.charData);
+    }
+    else {
+      character(req.session.authData.accessToken).then(function (charData) {
+        // Quick check to ensure char id is there.
+        if (charData.CharacterID) {
+          req.session.charData = charData;
+          resolve(charData);
+        }
+        else {
+          reject('Could not find Character ID');
+        }
+      }).catch(function (error) {
+        reject(error);
+      })
+    }
   });
 }
 
