@@ -9,6 +9,7 @@ var uuid = require('uuid');
 
 var routes = require('./routes/index');
 var apiRoutes = require('./routes/api');
+var apiFilters = require('./filters/api-filters');
 
 var app = express();
 
@@ -39,6 +40,9 @@ if (app.get('env') === 'production') {
   sessionOptions.cookie.secure = true;
 }
 app.use(session(sessionOptions));
+
+// filters
+app.use('/api', apiFilters);
 
 app.use('/', routes);
 app.use('/api', apiRoutes);
