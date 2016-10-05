@@ -5,7 +5,10 @@ import { HttpModule } from '@angular/http';
 import { Ng2BootstrapModule } from 'ng2-bootstrap/ng2-bootstrap';
 import { AppComponent } from './app.component';
 import { LandingComponent } from './landing/landing.component';
-import { AppRoutingModule } from './app.routing'; //TODO: Create app.routing
+import { TopBarComponent } from './top-bar/top-bar.component';
+import { AppRoutingModule } from './app.routing';
+
+import { CharacterService } from './common/character.service';
 
 @NgModule({
   imports: [
@@ -17,10 +20,11 @@ import { AppRoutingModule } from './app.routing'; //TODO: Create app.routing
   ],
   declarations: [
     AppComponent,
-    LandingComponent
+    LandingComponent,
+    TopBarComponent
   ],
   providers: [
-
+    CharacterService
   ],
   bootstrap: [AppComponent],
 })

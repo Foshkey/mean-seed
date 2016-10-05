@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
   moduleId: module.id,
   selector: 'app',
   template: `
+    <app-top-bar></app-top-bar>
     <router-outlet></router-outlet>
     `
 })
