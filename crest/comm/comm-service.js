@@ -34,16 +34,19 @@ function sendRequest(options, data) {
       reject(error);
     })
 
-    // Write data
-    if (data) {
-      req.write(querystring.stringify(data));
-    }
+    // Write Data
+    req.write(querystring.stringify(data || {}));
 
     // Log it
-    req.output.forEach(function (output) {
-      console.log('Request: ');
-      console.log(output);
-    })
+    console.log('Request: ');
+    if (req.output && req.output.length > 0) {
+      req.output.forEach(function (output) {
+        console.log(output);
+      })
+    }
+    else {
+      console.log(req._header);
+    }
 
     // Send
     req.end();
