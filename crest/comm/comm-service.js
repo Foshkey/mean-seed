@@ -25,6 +25,11 @@ function sendRequest(options, data) {
       // Catch errors in response
       .on('error', function (error) {
         reject(error);
+      })
+
+      // And in case if successful call with no data
+      .on('end', function () {
+        resolve();
       });
 
     });
@@ -35,7 +40,12 @@ function sendRequest(options, data) {
     })
 
     // Write Data
-    req.write(querystring.stringify(data || {}));
+    if (options.headers['Content-Type'] === 'application/x-www-form-urlencoded') {
+      req.write(querystring.stringify(data || {}));
+    }
+    else {
+      req.write(JSON.stringify(data || {}))
+    }
 
     // Log it
     console.log('Request: ');
