@@ -1,4 +1,4 @@
-var comm = require('./comm-service');
+var webRequest = require('../../request');
 
 module.exports = function (accessToken) {
 
@@ -12,5 +12,5 @@ module.exports = function (accessToken) {
       }
   };
 
-  return comm.sendRequest(options);
+  return webRequest(options);
 }

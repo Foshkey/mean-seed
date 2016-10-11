@@ -1,5 +1,5 @@
 var appConfig = require('../app-config');
-var comm = require('./comm-service');
+var webRequest = require('../../request');
 
 module.exports = function (postData) {
 
@@ -14,5 +14,5 @@ module.exports = function (postData) {
       }
   };
 
-  return comm.sendRequest(options, postData);
+  return webRequest(options, postData);
 }

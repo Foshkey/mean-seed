@@ -1,25 +1,38 @@
 var https = require('https');
+var parseString = require('xml2js').parseString;
 var promise = require('promise');
 var querystring = require('querystring');
 
-function sendRequest(options, data) {
+module.exports = function (options, data) {
   return new promise(function (resolve, reject) {
 
     // Create Request
     var req = https.request(options, function(res) {
+
+      // Log Status & Headers
+      console.log(`STATUS: ${res.statusCode}`);
+      console.log(`HEADERS: ${JSON.stringify(res.headers)}`);
+
       res.setEncoding('utf8');
       res.on('data', function (chunk) {
 
         // Log it
-        console.log('Response:');
+        console.log('BODY:');
         console.log(chunk);
 
-        // Verify valid json
-        var resData;
-        try { resData = JSON.parse(chunk) }
-        catch (e) { reject('Unable to parse chunk\n' + chunk); }
-
-        resolve(resData);
+        // First try json
+        try {
+          resolve(JSON.parse(chunk));
+        } catch (jsonError) { 
+          // Alright it's not json, try xml
+          parseString(chunk, function (xmlError, result) {
+            if (!xmlError) {
+              resolve(result);
+            } else {
+              reject(jsonError + ' | ' + xmlError);
+            }
+          });
+        }
       })
 
       // Catch errors in response
@@ -40,11 +53,13 @@ function sendRequest(options, data) {
     })
 
     // Write Data
-    if (options.headers['Content-Type'] === 'application/x-www-form-urlencoded') {
-      req.write(querystring.stringify(data || {}));
-    }
-    else {
-      req.write(JSON.stringify(data || {}))
+    if (data) {
+      if (options.headers['Content-Type'] === 'application/x-www-form-urlencoded') {
+        req.write(querystring.stringify(data || {}));
+      }
+      else {
+        req.write(JSON.stringify(data || {}))
+      }
     }
 
     // Log it
@@ -58,11 +73,7 @@ function sendRequest(options, data) {
       console.log(req._header);
     }
 
-    // Send
+    // Done
     req.end();
   });
-}
-
-module.exports = {
-  sendRequest: sendRequest
 }

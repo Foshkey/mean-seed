@@ -1,8 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
-var appConfig = require('../crest/app-config');
-var authService = require('../crest/auth/auth-service');
+var appConfig = require('../web/crest-tq/app-config');
+var authService = require('../web/crest-tq/auth/auth-service');
+var charIds = require('../web/eve-api/character-ids');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -42,5 +43,11 @@ router.get('/logout', function (req, res, next) {
   req.session.destroy();
   res.redirect('/');
 });
+
+router.get('/test', function (req, res, next) {
+  charIds(['The Foshkey']).then(function (result) {
+    res.json(result);
+  })
+})
 
 module.exports = router;

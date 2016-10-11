@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-var charService = require('../crest/char/char-service');
+var charService = require('../web/crest-tq/char/char-service');
 
 router.get('/char', function (req, res, next) {
   charService.getChar(req).then(function (charData) {

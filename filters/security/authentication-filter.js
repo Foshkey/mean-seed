@@ -1,6 +1,6 @@
 var promise = require('promise');
 
-var authService = require('../../crest/auth/auth-service');
+var authService = require('../../web/crest-tq/auth/auth-service');
 
 module.exports = function (req) {
   return new promise(function (resolve, reject) {
