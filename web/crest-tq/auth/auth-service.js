@@ -16,41 +16,37 @@ function AuthData() {
 
 // Authenticate Function
 function authenticate(authData, authorizationCode, state) {
-  return new promise(function (resolve, reject) {
 
-    // Verify state
-    if (state !== authData.state) {
-      reject('Invalid authentication state id.\nReceived:   ' + state + '\nCurrent id: ' + authData.state);
-    }
+  // Verify state
+  if (state !== authData.state) {
+    return promise.reject('Invalid authentication state id.\nReceived:   ' + state + '\nCurrent id: ' + authData.state);
+  }
 
-    // Post Data
-    var data = {
-      'grant_type': 'authorization_code',
-      'code': authorizationCode
-    };
+  // Post Data
+  var data = {
+    'grant_type': 'authorization_code',
+    'code': authorizationCode
+  };
 
-    sendAuthRequest(data, authData).then(resolve, reject);
+  return sendAuthRequest(data, authData);
 
-  });
 }
 
 function refresh(authData) {
-  return new promise(function (resolve, reject) {
 
-    // Check refresh token
-    if (!authData.refreshToken) {
-      reject('Refresh token does not exist.');
-    }
-    
-    // Post Data
-    var data = {
-      'grant_type': 'refresh_token',
-      'refresh_token': authData.refreshToken
-    };
+  // Check refresh token
+  if (!authData.refreshToken) {
+    return promise.reject('Refresh token does not exist.');
+  }
+  
+  // Post Data
+  var data = {
+    'grant_type': 'refresh_token',
+    'refresh_token': authData.refreshToken
+  };
 
-    sendAuthRequest(data, authData).then(resolve, reject);
+  return sendAuthRequest(data, authData);
 
-  });
 }
 
 function isExpired(authData) {

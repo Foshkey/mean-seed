@@ -62,6 +62,9 @@ module.exports = function (options, data) {
       }
     }
 
+    // Done
+    req.end();
+
     // Log it
     console.log('Request: ');
     if (req.output && req.output.length > 0) {
@@ -70,10 +73,7 @@ module.exports = function (options, data) {
       })
     }
     else {
-      console.log(req._header);
+      console.log(req);
     }
-
-    // Done
-    req.end();
   });
 }
