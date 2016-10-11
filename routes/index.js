@@ -44,10 +44,4 @@ router.get('/logout', function (req, res, next) {
   res.redirect('/');
 });
 
-router.get('/test', function (req, res, next) {
-  charIds(['The Foshkey']).then(function (result) {
-    res.json(result);
-  })
-})
-
 module.exports = router;
