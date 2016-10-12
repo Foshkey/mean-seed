@@ -1,11 +1,12 @@
-var express = require('express');
-var router = express.Router();
+let express = require('express');
+let router = express.Router();
 
-var appConfig = require('../web/crest-tq/app-config');
-var authService = require('../web/crest-tq/auth/auth-service');
+let appConfig = require('../web/crest-tq/app-config');
+let authService = require('../web/crest-tq/auth/auth-service');
+let charIds = require('../web/eve-api/character-ids');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', (req, res, next) => {
   
   // Create new auth service in session if it doesn't exist
   if (!req.session.authData) {
@@ -27,13 +28,13 @@ router.get('/', function(req, res, next) {
     if (req.query.code && req.query.state) {
 
       // Got code and state, let's try to authenticate now
-      authService.authenticate(req.session.authData, req.query.code, req.query.state).then(function () {
+      authService.authenticate(req.session.authData, req.query.code, req.query.state).then(() => {
 
         // Should be good to go at this point
         res.redirect('/');
 
       })
-      .catch(function (error) {
+      .catch(error => {
 
         // Authentication failed, one way or another. Kill session, send unauthorized response.
         console.log(error);
@@ -52,7 +53,7 @@ router.get('/', function(req, res, next) {
 });
 
 /* GET logout */
-router.get('/logout', function (req, res, next) {
+router.get('/logout', (req, res, next) => {
   req.session.destroy();
   res.redirect('/');
 });

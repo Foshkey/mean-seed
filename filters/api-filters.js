@@ -1,19 +1,17 @@
-var promise = require('promise');
+let authenticationFilter = require('./security/authentication-filter.js');
 
-var authenticationFilter = require('./security/authentication-filter.js');
+module.exports = (req, res, next) => {
 
-module.exports = function (req, res, next) {
-
-  var promiseChain = promise.resolve()
+  let promiseChain = Promise.resolve()
 
   // Authentication
-  .then(function () { return authenticationFilter(req) })
+  .then(() => authenticationFilter(req))
   
   // All passed at this point
-  .then(function () { next(); })
+  .then(() => { next(); })
 
   // Catch any failures or rejects
-  .catch(function (error) {
+  .catch(error => {
     console.log(error);
     req.session.destroy();
     res.redirect('/');

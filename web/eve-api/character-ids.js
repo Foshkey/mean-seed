@@ -1,42 +1,38 @@
-var promise = require('promise');
+let webRequest = require('../request');
 
-var webRequest = require('../request');
-
-module.exports = function (characterNames) {
-  return new promise(function (resolve, reject) {
+module.exports = (characterNames = []) => {
+  return new Promise((resolve, reject) => {
 
     if (!characterNames || characterNames.length === 0) {
       return resolve([]);
     }
 
-    var querystringNames = characterNames.map(function (name) {
-      return encodeURIComponent(name);
-    });
+    let querystringNames = characterNames.map(name => encodeURIComponent(name));
 
-    var options = {
+    let options = {
       host: 'api.eveonline.com',
-      path: '/eve/CharacterID.xml.aspx?names=' + querystringNames.join(','),
+      path: `/eve/CharacterID.xml.aspx?names=${querystringNames.join(',')}`,
       method: 'GET',
     };
 
-    webRequest(options).then(function (result) {
+    webRequest(options).then(result => {
       if (!result.eveapi || !result.eveapi.result || result.eveapi.result.length === 0) {
         reject('Could not find eve api result.');
       } else {
-        var charIdList = [];
-        var rowset = result.eveapi.result[0].rowset[0].row;
-        rowset.forEach(function (row) {
+        let charIdList = [];
+        let rowset = result.eveapi.result[0].rowset[0].row;
+        rowset.forEach(row => {
           if (row.$.characterID !== '0') {
             charIdList.push({
               name: row.$.name,
               characterID: +row.$.characterID
             })
           }
-        })
+        });
         resolve(charIdList);
       }
-    }).catch(function (error) {
-      reject(result);
+    }).catch(error => {
+      reject(error);
     });
   });
 }

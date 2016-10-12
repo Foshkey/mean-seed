@@ -1,14 +1,14 @@
-var webRequest = require('../../request');
+let webRequest = require('../../request');
 
-module.exports = function (accessToken) {
+module.exports = accessToken => {
 
   // Options
-  var options = {
+  let options = {
       host: 'login.eveonline.com',
       path: '/oauth/verify',
       method: 'GET',
       headers: {
-        'Authorization': 'Bearer ' + accessToken
+        'Authorization': `Bearer ${accessToken}`
       }
   };
 

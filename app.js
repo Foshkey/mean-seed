@@ -1,17 +1,17 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var session = require('express-session');
-var uuid = require('uuid');
+let express = require('express');
+let path = require('path');
+let favicon = require('serve-favicon');
+let logger = require('morgan');
+let cookieParser = require('cookie-parser');
+let bodyParser = require('body-parser');
+let session = require('express-session');
+let uuid = require('uuid');
 
-var routes = require('./routes/index');
-var apiRoutes = require('./routes/api');
-var apiFilters = require('./filters/api-filters');
+let routes = require('./routes/index');
+let apiRoutes = require('./routes/api');
+let apiFilters = require('./filters/api-filters');
 
-var app = express();
+let app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -26,7 +26,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // session setup
-var sessionOptions = {
+let sessionOptions = {
   genid: function(req) {
     return uuid.v4();
   },
@@ -49,7 +49,7 @@ app.use('/api', apiRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+  let err = new Error('Not Found');
   err.status = 404;
   next(err);
 });

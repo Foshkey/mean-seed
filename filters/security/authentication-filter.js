@@ -1,17 +1,14 @@
-var promise = require('promise');
+let authService = require('../../web/crest-tq/auth/auth-service');
 
-var authService = require('../../web/crest-tq/auth/auth-service');
-
-module.exports = function (req) {
-  return new promise(function (resolve, reject) {
-    var authData = req.session.authData;
+module.exports = req => {
+  return new Promise((resolve, reject) => {
+    let authData = req.session.authData;
     if (!authData || !authData.authenticated || !authData.accessToken || !authData.refreshToken) {
       reject('Authentication data is not valid');
     }
     if (authService.isExpired(authData)) {
       authService.refresh(authData).then(resolve, reject);
-    }
-    else {
+    } else {
       resolve();
     }
   });

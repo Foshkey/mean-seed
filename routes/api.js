@@ -1,23 +1,23 @@
-var express = require('express');
-var router = express.Router();
+let express = require('express');
+let router = express.Router();
 
-var charService = require('../web/crest-tq/char/char-service');
+let charService = require('../web/crest-tq/char/char-service');
 
-router.get('/char', function (req, res, next) {
-  charService.getChar(req).then(function (charData) {
+router.get('/char', (req, res, next) => {
+  charService.getChar(req).then(charData => {
     res.json({
       CharacterID: charData.CharacterID,
       CharacterName: charData.CharacterName
     });
-  }).catch(function (error) {
+  }).catch(error => {
     console.log(error);
-    var errRes = new Error('Could not find character');
+    let errRes = new Error('Could not find character');
     errRes.status = 500;
     next(errRes);
   })
 });
 
-router.post('/logout', function (req, res, next) {
+router.post('/logout', (req, res, next) => {
   req.session.destroy();
   res.status(200).send();
 });

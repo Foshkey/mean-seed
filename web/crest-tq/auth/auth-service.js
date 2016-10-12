@@ -1,29 +1,30 @@
-var promise = require('promise');
-var uuid = require('uuid');
+let uuid = require('uuid');
 
-var login = require('../comm/login');
+let login = require('../comm/login');
 
-// AuthData Constructor Function
-function AuthData() {
-  this.authenticated = false;
-  this.authenticatedAt;
-  this.state = uuid.v4();
-  this.accessToken;
-  this.tokenType;
-  this.expiresIn;
-  this.refreshToken;
+// AuthData
+class AuthData {
+  constructor() {
+    this.authenticated = false;
+    this.authenticatedAt = false;
+    this.state = uuid.v4();
+    this.accessToken = '';
+    this.tokenType = '';
+    this.expiresIn = '';
+    this.refreshToken = '';
+  }
 }
 
 // Authenticate Function
-function authenticate(authData, authorizationCode, state) {
+let authenticate = (authData, authorizationCode, state) => {
 
   // Verify state
   if (state !== authData.state) {
-    return promise.reject('Invalid authentication state id.\nReceived:   ' + state + '\nCurrent id: ' + authData.state);
+    return promise.reject(`Invalid authentication state id.\nReceived:   ${state}\nCurrent id: ${authData.state}`);
   }
 
   // Post Data
-  var data = {
+  let data = {
     'grant_type': 'authorization_code',
     'code': authorizationCode
   };
@@ -32,15 +33,15 @@ function authenticate(authData, authorizationCode, state) {
 
 }
 
-function refresh(authData) {
+let refresh = authData => {
 
   // Check refresh token
-  if (!authData.refreshToken) {
-    return promise.reject('Refresh token does not exist.');
+  if (!authData || !authData.refreshToken) {
+    return Promise.reject('Refresh token does not exist.');
   }
   
   // Post Data
-  var data = {
+  let data = {
     'grant_type': 'refresh_token',
     'refresh_token': authData.refreshToken
   };
@@ -49,19 +50,19 @@ function refresh(authData) {
 
 }
 
-function isExpired(authData) {
+let isExpired = authData => {
 
-  var now = new Date();
-  var nowTime = now.getTime();
-  var expiredTime = authData.authenticatedAt + authData.expiresIn * 1000;
+  let now = new Date();
+  let nowTime = now.getTime();
+  let expiredTime = authData.authenticatedAt + authData.expiresIn * 1000;
 
   return nowTime >= expiredTime;
 }
 
-function sendAuthRequest(postData, authData) {
-  return new promise(function (resolve, reject) {
+let sendAuthRequest = (postData, authData) => {
+  return new Promise((resolve, reject) => {
 
-    login(postData).then(function (resData) {
+    login(postData).then(resData => {
       // Verify access token is filled
       if (resData.access_token) {
 
@@ -77,7 +78,7 @@ function sendAuthRequest(postData, authData) {
       else {
         reject('Access token could not be found');
       }
-    }).catch(function (error) {
+    }).catch(error => {
       reject(error);
     })
 

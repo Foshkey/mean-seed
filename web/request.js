@@ -1,20 +1,19 @@
-var https = require('https');
-var parseString = require('xml2js').parseString;
-var promise = require('promise');
-var querystring = require('querystring');
+let https = require('https');
+let parseString = require('xml2js').parseString;
+let querystring = require('querystring');
 
-module.exports = function (options, data) {
-  return new promise(function (resolve, reject) {
+module.exports = (options, data) => {
+  return new Promise((resolve, reject) => {
 
     // Create Request
-    var req = https.request(options, function(res) {
+    let req = https.request(options, res => {
 
       // Log Status & Headers
       console.log(`STATUS: ${res.statusCode}`);
       console.log(`HEADERS: ${JSON.stringify(res.headers)}`);
 
       res.setEncoding('utf8');
-      res.on('data', function (chunk) {
+      res.on('data', chunk => {
 
         // Log it
         console.log('BODY:');
@@ -25,7 +24,7 @@ module.exports = function (options, data) {
           resolve(JSON.parse(chunk));
         } catch (jsonError) { 
           // Alright it's not json, try xml
-          parseString(chunk, function (xmlError, result) {
+          parseString(chunk, (xmlError, result) => {
             if (!xmlError) {
               resolve(result);
             } else {
@@ -36,19 +35,19 @@ module.exports = function (options, data) {
       })
 
       // Catch errors in response
-      .on('error', function (error) {
+      .on('error', error => {
         reject(error);
       })
 
       // And in case if successful call with no data
-      .on('end', function () {
+      .on('end', () => {
         resolve();
       });
 
     });
 
     // Catch errors in creating the request
-    req.on('error', function (error) {
+    req.on('error', error => {
       reject(error);
     })
 
@@ -68,7 +67,7 @@ module.exports = function (options, data) {
     // Log it
     console.log('Request: ');
     if (req.output && req.output.length > 0) {
-      req.output.forEach(function (output) {
+      req.output.forEach(output => {
         console.log(output);
       })
     }

@@ -1,15 +1,15 @@
-var appConfig = require('../app-config');
-var webRequest = require('../../request');
+let appConfig = require('../app-config');
+let webRequest = require('../../request');
 
-module.exports = function (postData) {
+module.exports = postData => {
 
   // Options
-  var options = {
+  let options = {
       host: 'login.eveonline.com',
       path: '/oauth/token',
       method: 'POST',
       headers: {
-        'Authorization': 'Basic ' + appConfig.authHeader,
+        'Authorization': `Basic ${appConfig.authHeader}`,
         'Content-Type': 'application/x-www-form-urlencoded'
       }
   };

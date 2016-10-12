@@ -1,33 +1,31 @@
-var promise = require('promise');
+let character = require('../comm/character');
 
-var character = require('../comm/character');
-
-var CharData = function () {
-  this.CharacterID = 0,
-  this.CharacterName = '',
-  this.ExpiresOn = '',
-  this.Scopes = '',
-  this.TokenType = '',
-  this.CharacterOwnerHash = '',
-  this.IntellectualProperty = ''
+class CharData {
+  constructor() {
+    this.CharacterID = 0;
+    this.CharacterName = '';
+    this.ExpiresOn = '';
+    this.Scopes = '';
+    this.TokenType = '';
+    this.CharacterOwnerHash = '';
+    this.IntellectualProperty = '';
+  }
 }
 
-var getChar = function (req) {
-  return new promise(function (resolve, reject) {
+let getChar = req => {
+  return new Promise((resolve, reject) => {
     if (req.session.charData) {
       resolve(req.session.charData);
-    }
-    else {
-      character(req.session.authData.accessToken).then(function (charData) {
+    } else {
+      character(req.session.authData.accessToken).then(charData => {
         // Quick check to ensure char id is there.
         if (charData.CharacterID) {
           req.session.charData = charData;
           resolve(charData);
-        }
-        else {
+        } else {
           reject('Could not find Character ID');
         }
-      }).catch(function (error) {
+      }).catch(error => {
         reject(error);
       })
     }
