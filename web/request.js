@@ -2,6 +2,8 @@ let https = require('https');
 let parseString = require('xml2js').parseString;
 let querystring = require('querystring');
 
+let logger = require('../logger');
+
 module.exports = (options, data) => {
   return new Promise((resolve, reject) => {
 
@@ -9,23 +11,26 @@ module.exports = (options, data) => {
     let req = https.request(options, res => {
 
       // Log Status & Headers
-      console.log(`STATUS: ${res.statusCode}`);
-      console.log(`HEADERS: ${JSON.stringify(res.headers)}`);
+      logger.debug(`Status: ${res.statusCode}`);
+      logger.debug(`Headers: ${JSON.stringify(res.headers)}`);
 
       res.setEncoding('utf8');
       res.on('data', chunk => {
 
         // Log it
-        console.log('BODY:');
-        console.log(chunk);
+        logger.debug(`BODY: ${chunk}`);
 
         // First try json
         try {
+          logger.debug('Attempting JSON...');
           resolve(JSON.parse(chunk));
-        } catch (jsonError) { 
+          logger.debug('Success');
+        } catch (jsonError) {
           // Alright it's not json, try xml
+          logger.debug('Attempting XML...');
           parseString(chunk, (xmlError, result) => {
             if (!xmlError) {
+              logger.debug('Success');
               resolve(result);
             } else {
               reject(jsonError + ' | ' + xmlError);
@@ -41,6 +46,7 @@ module.exports = (options, data) => {
 
       // And in case if successful call with no data
       .on('end', () => {
+        logger.debug('Done');
         resolve();
       });
 
@@ -65,14 +71,6 @@ module.exports = (options, data) => {
     req.end();
 
     // Log it
-    console.log('Request: ');
-    if (req.output && req.output.length > 0) {
-      req.output.forEach(output => {
-        console.log(output);
-      })
-    }
-    else {
-      console.log(req);
-    }
+    logger.info(`${options.method} ${options.host}${options.path}`, { output: req.output });
   });
 }

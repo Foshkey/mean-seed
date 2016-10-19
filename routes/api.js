@@ -2,6 +2,7 @@ let express = require('express');
 let router = express.Router();
 
 let charService = require('../web/crest-tq/char/char-service');
+let logger = require('../logger');
 
 router.get('/char', (req, res, next) => {
   charService.getChar(req).then(charData => {
@@ -10,7 +11,7 @@ router.get('/char', (req, res, next) => {
       CharacterName: charData.CharacterName
     });
   }).catch(error => {
-    console.log(error);
+    logger.error(error);
     let errRes = new Error('Could not find character');
     errRes.status = 500;
     next(errRes);

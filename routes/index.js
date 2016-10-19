@@ -4,6 +4,7 @@ let router = express.Router();
 let appConfig = require('../web/crest-tq/app-config');
 let authService = require('../web/crest-tq/auth/auth-service');
 let charIds = require('../web/eve-api/character-ids');
+let logger = require('../logger');
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
@@ -37,7 +38,7 @@ router.get('/', (req, res, next) => {
       .catch(error => {
 
         // Authentication failed, one way or another. Kill session, send unauthorized response.
-        console.log(error);
+        logger.error(error);
         req.session.destroy();
         res.status(401).send('Unauthorized');
 
