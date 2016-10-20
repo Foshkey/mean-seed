@@ -1,12 +1,19 @@
+let fs = require('fs');
 let winston = require('winston');
 winston.emitErrs = true;
+
+const logDir = 'logs';
+
+if (!fs.existsSync(logDir)) {
+  fs.mkdirSync(logDir);
+}
 
 let logger = new winston.Logger({
   transports: [
     new winston.transports.File({
       name: 'info-file',
       level: 'info',
-      filename: './logs/info-logs.log',
+      filename: `./${logDir}/info-logs.log`,
       handleExceptions: true,
       json: true,
       maxsize: 5242880, // 5MB
@@ -15,7 +22,7 @@ let logger = new winston.Logger({
     new winston.transports.File({
       name: 'error-file',
       level: 'error',
-      filename: './logs/error-logs.log',
+      filename: `./${logDir}/error-logs.log`,
       handleExceptions: true,
       json: true,
       maxsize: 5242880, // 5MB
