@@ -78,5 +78,9 @@ app.use((err, req, res, next) => {
   });
 });
 
+logger.info('App Started', {
+  locals: app.locals,
+  mountpath: app.mountpath
+});
 
 module.exports = app;
